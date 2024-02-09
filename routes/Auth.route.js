@@ -12,6 +12,7 @@ router.delete('/logout', AuthController.logout)
 
 router.post('/addfriend', AuthController.addfriend)
 
+router.get('/getfriends/:id' , AuthController.getfriends)
 
 module.exports = router
 

@@ -79,41 +79,49 @@ module.exports = {
             })
         }
     },
-    addfriend : async (req, res,next) => {
-        const { userId, friendId , friendName } = req.body;
+    addfriend: async (req, res, next) => {
+        const { userId, friendId, friendName } = req.body;
 
         try {
-            const currentUser = await User.findOne({ _id : userId })
+            const currentUser = await User.findOne({ _id: userId })
             const isuser = await User.findOne({ $or: [{ email: friendId }, { phone: friendId }] })
-            const isFriend = await friend.findOne({$or : [{$and : [{'friendList.friendName' : friendName} , {'friendList.isFriend' : true}]} ,{$and : [{'friendList.friendUserName' : friendId} , {'friendList.isFriend' : true}]}]})
-            if(isFriend)
-                return createError[404]('user already exist with username/friendname')
-            if (!isuser) 
-                return createError[404]('user not found')
-                const mainUser = await friend.findOneAndUpdate(
-                    { id: currentUser._id }, 
-                    {
-                        $push: {
-                            friendList: {
-                                friendName: friendName,
-                                friendUserName: friendId,
-                                isFriend :true
-                            },
+            const isFriend = await friend.findOne({ $or: [{ $and: [{ 'friendList.friendName': friendName }, { 'friendList.isFriend': true }] }, { $and: [{ 'friendList.friendUserName': friendId }, { 'friendList.isFriend': true }] }] })
+            console.log(userId, friendId, friendName)
+            if (isFriend)
+                throw createError[404]('user already exist with username/friendname')
+            if (!isuser)
+                throw createError[404]('user not found')
+            const mainUser = await friend.findOneAndUpdate(
+                { id: currentUser._id },
+                {
+                    $push: {
+                        friendList: {
+                            friendName: friendName,
+                            friendUserName: friendId,
+                            isFriend: true
                         },
                     },
-                    { new: true, upsert: true } // Create a new user if not found
-                );
-                const friendFriends = await friend.findOneAndUpdate(
-                    { id: isuser._id },
-                    { $push: { friendList: { friendName: currentUser.name, friendUserName: currentUser.email, isFriend: false } } },
-                    { upsert: true, new: true }
-                );
-             res.json({ success: true, message: 'Friend added successfully', mainUser });
-          
+                },
+                { new: true, upsert: true }
+            );
+            const friendFriends = await friend.findOneAndUpdate(
+                { id: isuser._id },
+                { $push: { friendList: { friendName: currentUser.name, friendUserName: currentUser.email, isFriend: false } } },
+                { upsert: true, new: true }
+            );
+            res.json({ success: true, message: 'Friend added successfully', mainUser });
+
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ success: false, message: 'Internal server error' });
+            next(error)
         }
     },
-
+    getfriends: async (req, res, next) => {
+        try {
+            const id = req.params.id
+            const friendslist = await friend.findOne({ id: id })
+            res.json(friendslist)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
