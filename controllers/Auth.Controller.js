@@ -3,6 +3,7 @@ const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const friend = require('../models/friend')
+const chats = require('../models/chats')
 module.exports = {
     register: async (req, res, next) => {
         try {
@@ -80,7 +81,7 @@ module.exports = {
         }
     },
     addfriend: async (req, res, next) => {
-        const { userId, friendId, friendName } = req.body;
+        const { userId, friendId, friendName ,chatId} = req.body;
 
         try {
             const currentUser = await User.findOne({ _id: userId })
@@ -98,7 +99,8 @@ module.exports = {
                         friendList: {
                             friendName: friendName,
                             friendUserName: friendId,
-                            isFriend: true
+                            isFriend: true,
+                            chatId :chatId
                         },
                     },
                 },
@@ -106,7 +108,7 @@ module.exports = {
             );
             const friendFriends = await friend.findOneAndUpdate(
                 { id: isuser._id },
-                { $push: { friendList: { friendName: currentUser.name, friendUserName: currentUser.email, isFriend: false } } },
+                { $push: { friendList: { friendName: currentUser.name, friendUserName: currentUser.email, isFriend: false ,chatId :chatId} } },
                 { upsert: true, new: true }
             );
             res.json({ success: true, message: 'Friend added successfully', mainUser });
@@ -121,6 +123,15 @@ module.exports = {
             const friendslist = await friend.findOne({ id: id })
             res.json(friendslist)
         } catch (error) {
+            next(error)
+        }
+    },
+    getchats :async(req,res,next)=>{
+        try{
+            const id = req.params.id
+            const chatdata = await chats.findOne({id})
+            res.json(chatdata)
+        }catch(error){
             next(error)
         }
     }

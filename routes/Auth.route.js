@@ -6,13 +6,15 @@ router.post('/register', AuthController.register)
 
 router.post('/login', AuthController.login)
 
-router.get('/user' , AuthController.user)
+router.post('/addfriend', AuthController.addfriend)
 
 router.delete('/logout', AuthController.logout)
 
-router.post('/addfriend', AuthController.addfriend)
+router.get('/user' , AuthController.user)
 
 router.get('/getfriends/:id' , AuthController.getfriends)
+
+router.get('/getchats/:id' , AuthController.getchats)
 
 module.exports = router
 

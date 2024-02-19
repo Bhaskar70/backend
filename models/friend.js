@@ -14,6 +14,10 @@ const friendList = new mongoose.Schema({
     isFriend :{
         type :Boolean ,
         required:true
+    },
+    chatId :{
+        type:String ,
+        required :true
     }
 })
 const friends = new mongoose.Schema({
