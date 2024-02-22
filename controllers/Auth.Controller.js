@@ -111,7 +111,7 @@ module.exports = {
                 { $push: { friendList: { friendName: currentUser.name, friendUserName: currentUser.email, isFriend: false ,chatId :chatId} } },
                 { upsert: true, new: true }
             );
-            res.json({ success: true, message: 'Friend added successfully', mainUser });
+            res.json(mainUser);
 
         } catch (error) {
             next(error)

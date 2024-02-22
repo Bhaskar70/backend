@@ -19,6 +19,7 @@ let socketIO = require('socket.io');
 const chats = require('./models/chats')
 let io = socketIO(server);
 io.on('connection', async (socket) => {
+ // message sending
     socket.on('message', async (data) => {
         console.log(data)
         const message = await chats.findOneAndUpdate(
@@ -32,6 +33,14 @@ io.on('connection', async (socket) => {
         );
         io.emit('new message', {...data.chat});
     });
+
+  // user chat details
+    socket.on('latestMessage' , async(chatId)=>{
+            const chat = await chats.findOne({ id: chatId });
+            const lastMessage = chat.chats[chat.chats.length - 1]; // Get the last message
+            const unreadMessagesCount = chat.chats.filter(message => !message.read).length; // Count unread messages
+            io.emit('userChatData', { lastMessage, unreadMessagesCount });
+    })
 })
 app.use('/api', routes)
 
