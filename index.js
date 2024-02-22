@@ -42,7 +42,7 @@ io.on('connection', async (socket) => {
             io.emit('userChatData', { lastMessage, unreadMessagesCount });
     })
 })
-app.use('/api', routes)
+app.use('/', routes)
 
 server.listen(3000, () => {
     console.log(`server listening at 3000`)
