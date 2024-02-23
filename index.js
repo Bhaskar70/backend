@@ -9,10 +9,7 @@ app = express()
 let http = require('http');
 let server = http.Server(app);
 app.use(cookieParser())
-app.use(cors({
-    credentials: true,
-    origin: ['https://backend-msru.onrender.com', 'http://localhost:8080', 'http://localhost:4200']
-}))
+app.use(cors())
 
 app.use(express.json())
 let socketIO = require('socket.io');
