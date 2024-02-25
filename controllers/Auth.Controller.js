@@ -34,8 +34,10 @@ module.exports = {
             const token = jwt.sign({ _id: user._id }, "secret")
 
             res.cookie('jwt', token, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000 // 1 day
+                maxAge: 900000, 
+                httpOnly: true, 
+                secure: true, // Ensure cookie is only sent over HTTPS
+                sameSite: 'None' 
             })
 
             res.send({
