@@ -1,19 +1,19 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+app = express()
+app.use(cookieParser())
+app.use(cors({ 
+ origin: '', 
+ credentials: true,
+}))
+app.options('*', cors())
 const cookieParser = require('cookie-parser')
 require('./helper/mongoose')
 const routes = require('./routes/Auth.route')
 
-app = express()
 let http = require('http');
 let server = http.Server(app);
-app.use(cookieParser())
-app.use(cors({ 
- origin: '*', 
- credentials: true,
-}))
-app.options('*', cors())
 app.use(express.json())
 let socketIO = require('socket.io');
 const chats = require('./models/chats')
