@@ -4,7 +4,7 @@ const cors = require('cors')
 app = express()
 app.use(cookieParser())
 app.use(cors({ 
- origin: '', 
+ origin: '*', 
  credentials: true,
 }))
 app.options('*', cors())
