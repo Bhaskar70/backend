@@ -9,7 +9,7 @@ app = express()
 let http = require('http');
 let server = http.Server(app);
 app.use(cookieParser())
-app.use(cors({ 
+server.use(cors({ 
  origin: '*', 
  credentials: true,
 }))
