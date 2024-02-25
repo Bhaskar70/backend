@@ -13,7 +13,7 @@ app.use(cors({
  origin: '*', 
  credentials: true,
 }))
-
+app.options('*', cors())
 app.use(express.json())
 let socketIO = require('socket.io');
 const chats = require('./models/chats')
