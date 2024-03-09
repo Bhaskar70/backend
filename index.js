@@ -9,7 +9,7 @@ require('./helper/mongoose')
 const routes = require('./routes/Auth.route')
 app = express()
 const corsOptions = {
-    origin: 'https://bhaskar70.github.io',
+    origin: ['https://bhaskar70.github.io' , 'http://localhost:3000','http://localhost:4200'],
     credentials: true,
 };
 
